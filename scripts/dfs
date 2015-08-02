@@ -1,7 +1,44 @@
 #!/usr/bin/env python
 
+# -*- coding: utf-8 -*-
+
+import sys, os
+
+from optparse import OptionParser
+
+Q = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.abspath(Q + "/../src"))
+
+from dfs.version import Version
+from dfs.config import Config
+
 def main():
-    print "dfs"
+    parser = OptionParser(usage="usage: %prog [cmd] [options]", version="%prog " + Version.VERSION)
+    # parser.add_option("-v", "--verbose", dest="verbose", action="store_true",
+    #                   default="False", help="verbose output")
+    # parser.add_option("-t", "--target", desc="target", action="", default="", help="target volume")
+    parser.add_option("-f", "--force", dest="force", action="store_true",
+        default=False, help="force operation")
+
+    # parse arguments
+    config = Config()
+    config.set_parser(parser)
+    opts = config.get_opts()
+    if len(opts) <= 0:
+        print "dfs: incorrect command (try -h)"
+        sys.exit(-1)
+    # TODO: dynamic mapping
+    if opts[0] == "init":
+        from dfs.cmds.init import Init
+        init = Init(opts[1:])
+        if init.has_errors():
+            print "dfs: " + init.get_errors_str()
+            sys.exit(-1)
+        init.run()
+    else:
+        print "dfs: undefined option (try -h)"
+        sys.exit(-1)
+
 
 # entry point
 if __name__ == "__main__":
