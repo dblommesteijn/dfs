@@ -15,7 +15,7 @@
 It will not overwrite existing files by default.
 
 ```bash
-./script/dfs init <target> <size in mb>
+./script/dfs init <target> <size_in_mb>
 ```
 
 
