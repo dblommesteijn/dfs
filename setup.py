@@ -12,7 +12,7 @@ setup(
   author = "Dennis Blommesteijn",
   author_email = "dennis@blommesteijn.com",
   description = ("dfs"),
-  license = "MIT",
+  license = "BSD-3",
   keywords = "dfs object-store file-system",
   url = "https://github.com/dblommesteijn/dfs",
   packages = ['dfs'],
@@ -20,6 +20,6 @@ setup(
   long_description = read('README.md'),
   scripts = ["scripts/dfs"],
   install_requires = [
-    "distribute", 'Flask', 'Flask-Script', 'Flask-Jsonpify'
+    "distribute", 'flask', 'uwsgi'
   ]
 )

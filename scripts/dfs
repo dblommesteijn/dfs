@@ -12,8 +12,14 @@ sys.path.append(os.path.abspath(Q + "/../src"))
 from dfs.version import Version
 from dfs.config import Config
 
+from dfs.cmd import Cmd
+
 def main():
-    parser = OptionParser(usage="usage: %prog [cmd] [options]", version="%prog " + Version.VERSION)
+    # init help
+    cmd = Cmd()
+    cmds = "\r\nCommands:\r\n" + cmd.get_help()
+    # parse arguments
+    parser = OptionParser(usage="usage: %prog [cmd] [options]" + cmds, version="%prog " + Version.VERSION)
     # parser.add_option("-v", "--verbose", dest="verbose", action="store_true",
     #                   default="False", help="verbose output")
     # parser.add_option("-t", "--target", desc="target", action="", default="", help="target volume")
@@ -25,20 +31,17 @@ def main():
     config.set_parser(parser)
     opts = config.get_opts()
     if len(opts) <= 0:
-        print "dfs: incorrect command (try -h)"
+        print "dfs: no command given (try -h)"
         sys.exit(-1)
-    # TODO: dynamic mapping
-    if opts[0] == "init":
-        from dfs.cmds.init import Init
-        init = Init(opts[1:])
-        if init.has_errors():
-            print "dfs: " + init.get_errors_str()
-            sys.exit(-1)
-        init.run()
-    else:
-        print "dfs: undefined option (try -h)"
+    cmd.set_opt(opts[0])
+    cmd.validate()
+    if cmd.invalid_cmd():
+        print "dfs: %s: invalid command" % opts[0]
         sys.exit(-1)
-
+    if cmd.has_errors():
+        print "dfs: " + cmd.get_errors_str()
+        sys.exit(-1)
+    cmd.run()
 
 # entry point
 if __name__ == "__main__":

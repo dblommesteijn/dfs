@@ -1,0 +1,10 @@
+uwsgi:
+  wsgi-file: wsgi.py
+  http-socket: :5000
+  master: 1
+  threads: 8
+  processes: 1
+  stats: 127.0.0.1:9191
+  die-on-term: 1
+  vacuum: 0
+  buffer-size: 2048000
